@@ -1,127 +1,98 @@
 import { useState } from 'react';
 import {
-  Home,
-  BarChart2,
-  Package,
-  Settings,
+  LayoutGrid,
   CreditCard,
-  Share2,
+  Package2,
+  Heart,
+  BarChart2,
+  Users,
   ChevronLeft,
   ChevronRight,
+  ExternalLink
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ setCurrentPage, currentPage }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const toggleSidebar = () => setIsExpanded(!isExpanded);
 
   const navItems = [
-    { name: 'Dashboard', icon: <Home size={20} /> },
-    { name: 'Analytics', icon: <BarChart2 size={20} /> },
-    { name: 'Inventory', icon: <Package size={20} /> },
-    { name: 'Settings', icon: <Settings size={20} /> },
-    { name: 'Subscription', icon: <CreditCard size={20} /> },
-    { name: 'Referral', icon: <Share2 size={20} /> },
+    { name: 'Dashboard', icon: <LayoutGrid size={20} /> },
+    { name: 'Billing', icon: <CreditCard size={20} /> },
+    { name: 'Inventory', icon: <Package2 size={20} /> },
+    { name: 'Loyalty', icon: <Heart size={20} /> },
+    { name: 'Sales', icon: <BarChart2 size={20} /> },
+    { name: 'Referrals', icon: <Users size={20} /> },
   ];
 
-  const SidebarContent = () => (
+  return (
     <div
-      className={`h-screen bg-white text-white transition-all duration-300 ${
+      className={`h-screen bg-white transition-all duration-300 ${
         isExpanded ? 'w-64' : 'w-16'
       } flex flex-col shadow-lg`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <div className="flex items-center">
-          <div className="flex-shrink-0 bg-blue-500 p-2 rounded-md mr-2">
-            <div className="w-6 h-6 text-white flex items-center justify-center font-bold">S</div>
-          </div>
-          {isExpanded && <h1 className="font-bold text-[color:var(--bakery-purple)] text-lg">ShopName</h1>}
+          <div className="flex-shrink-0 bg-purple-400 rounded-md mr-2 w-8 h-8"></div>
+          {isExpanded && <h1 className="font-semibold text-gray-800 text-lg">Sweet POS</h1>}
         </div>
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-md hover:bg-[color:var(--bakery-purple)] bg-[color:var(--bakery-purple)]/50 hidden md:inline"
+          className="p-1 rounded-full bg-gray-100 text-gray-500"
         >
           {isExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
         </button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 pt-4 overflow-auto">
-        <ul className="p-[5px]">
-          {navItems.map((item, index) => {
-            const isActive = index === activeIndex;
+      <nav className="flex-1 pt-2">
+        <ul>
+          {navItems.map((item) => {
+            const isActive = item.name === currentPage;
             return (
-              <li key={index}>
-                <a
-                  href="#"
-                  onClick={() => setActiveIndex(index)}
-                  className={`flex items-center ${
+              <li key={item.name}>
+                <button
+                  onClick={() => setCurrentPage(item.name)}
+                  className={`flex items-center w-full text-left ${
                     isExpanded ? 'px-4 py-3' : 'px-4 py-3 justify-center'
                   } transition-all ${
                     isActive
-                      ? 'bg-[color:var(--bakery-purple)]/30 border-l-[5px] border-[color:var(--bakery-purple)] text-[color:var(--bakery-purple)]'
-                      : 'hover:bg-[color:var(--bakery-purple)]/30 text-black'
+                      ? 'bg-purple-50 border-l-4 border-purple-400 text-purple-600'
+                      : 'hover:bg-purple-50 text-gray-600'
                   }`}
                 >
-                  <span>{item.icon}</span>
-                  {isExpanded && <span className="ml-3 font-semibold">{item.name}</span>}
-                </a>
+                  <span className={isActive ? 'text-purple-600' : 'text-gray-500'}>{item.icon}</span>
+                  {isExpanded && <span className={`ml-3 ${isActive ? 'text-purple-600 font-medium' : 'text-gray-600'}`}>{item.name}</span>}
+                </button>
               </li>
             );
           })}
         </ul>
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200">
-        {isExpanded ? (
-          <div className="text-xs text-gray-400">© 2025 ShopName</div>
-        ) : (
-          <div className="flex justify-center text-gray-400">©</div>
-        )}
+      {/* User Profile */}
+      <div className="p-4 border-t border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+              A
+            </div>
+            {isExpanded && (
+              <div className="ml-3">
+                <div className="text-gray-700 font-medium">Admin</div>
+                <div className="text-gray-500 text-sm">Bakery Staff</div>
+              </div>
+            )}
+          </div>
+          {isExpanded && (
+            <button className="text-gray-400 hover:text-gray-600">
+              <ExternalLink size={18} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
-  );
-
-  const BottomTabNav = () => (
-    <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 flex justify-around py-2 md:hidden">
-      {navItems.map((item, index) => {
-        const isActive = index === activeIndex;
-        return (
-          <button
-            key={index}
-            onClick={() => setActiveIndex(index)}
-            className={`p-2 ${
-              isActive ? 'text-[color:var(--bakery-purple)] bg-[color:var(--bakery-purple)]/50 border-b-[5px] border-b-[color--var(--bakery-purple)]' : 'text-gray-500'
-            } hover:text-[color:var(--bakery-purple)] transition-colors`}
-          >
-            {item.icon}
-          </button>
-        );
-      })}
-    </div>
-  );
-
-  const MobileTopBar = () => (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 py-3 px-4 z-50">
-      <h1 className="text-xl font-semibold text-[color:var(--bakery-purple)]">bakeryPulse</h1>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Sidebar for desktop */}
-      <div className="hidden md:block">{SidebarContent()}</div>
-
-      {/* Topbar + Bottom tab for mobile */}
-      <div className="md:hidden">
-        {MobileTopBar()}
-        <div className="h-14" /> {/* Spacer below topbar */}
-        {BottomTabNav()}
-      </div>
-    </>
   );
 };
 
