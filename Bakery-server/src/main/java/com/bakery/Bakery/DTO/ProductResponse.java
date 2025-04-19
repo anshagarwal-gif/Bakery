@@ -1,33 +1,34 @@
-package com.bakery.Bakery.Entity;
+package com.bakery.Bakery.DTO;
 
+import com.bakery.Bakery.Entity.BakeryShop;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-@Entity
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductResponse {
     private Long productId;
-
-    @ManyToOne
-    private BakeryShop bakery;
-
     private String productName;
     private String description;
     private Double price;
     private String category;
     private String imageUrl;
     private LocalDateTime createdAt;
+    private BakeryShop bakery;
+    private boolean isAvailable;
+
+    public ProductResponse(Long productId, String productName, String description,
+                           Double price, String category, String imageUrl,
+                           LocalDateTime createdAt, BakeryShop bakery, boolean isAvailable) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
+        this.bakery = bakery;
+        this.isAvailable = isAvailable;
+    }
+
+    // Getters and Setters
 
     public Long getProductId() {
         return productId;
@@ -35,14 +36,6 @@ public class Product {
 
     public void setProductId(Long productId) {
         this.productId = productId;
-    }
-
-    public BakeryShop getBakery() {
-        return bakery;
-    }
-
-    public void setBakery(BakeryShop bakery) {
-        this.bakery = bakery;
     }
 
     public String getProductName() {
@@ -92,4 +85,21 @@ public class Product {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public BakeryShop getBakery() {
+        return bakery;
+    }
+
+    public void setBakery(BakeryShop bakery) {
+        this.bakery = bakery;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
 }
+

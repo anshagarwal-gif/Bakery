@@ -1,50 +1,29 @@
-package com.bakery.Bakery.Entity;
+package com.bakery.Bakery.DTO;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-@Entity
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
-
-    @ManyToOne
-    private BakeryShop bakery;
+@Getter
+public class AddProduct {
 
     private String productName;
+
     private String description;
+
     private Double price;
+
     private String category;
+
     private String imageUrl;
-    private LocalDateTime createdAt;
 
-    public Long getProductId() {
-        return productId;
-    }
+    private Long bakeryId;
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
+    private Integer stockQuantity;
 
-    public BakeryShop getBakery() {
-        return bakery;
-    }
+    private Integer reorderLevel;
 
-    public void setBakery(BakeryShop bakery) {
-        this.bakery = bakery;
-    }
-
+    // Getters and setters
     public String getProductName() {
         return productName;
     }
@@ -85,11 +64,28 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Long getBakeryId() {
+        return bakeryId;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setBakeryId(Long bakeryId) {
+        this.bakeryId = bakeryId;
     }
+
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public Integer getReorderLevel() {
+        return reorderLevel;
+    }
+
+    public void setReorderLevel(Integer reorderLevel) {
+        this.reorderLevel = reorderLevel;
+    }
+
 }
