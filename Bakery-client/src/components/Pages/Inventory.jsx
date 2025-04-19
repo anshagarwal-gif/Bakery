@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Search, Plus, Edit, Trash } from 'lucide-react';
+import axios from 'axios';
 
 export default function InventoryManagement() {
   const [products, setProducts] = useState([
@@ -17,11 +18,22 @@ export default function InventoryManagement() {
 
   const [selectedFilter, setSelectedFilter] = useState('All');
   const filters = ['All', 'Pastries', 'Muffins', 'Cupcakes', 'Breads', 'Cookies', 'Cakes'];
-
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  console.log(apiBaseUrl)
   const filteredProducts = selectedFilter === 'All'
     ? products
     : products.filter(product => product.category === selectedFilter);
-
+  const fetchInventory = async()=>{
+    try {
+      const res = await axios.get(`${apiBaseUrl}/api/inventory`)
+      console.log(res.data)
+    } catch (error) {
+      console.log({message:error})
+    }
+  }
+  useEffect(()=>{
+    fetchInventory()
+  })
   const handleIncrement = (id) => {
     setProducts(products.map(product => 
       product.id === id ? { ...product, quantity: product.quantity + 1 } : product

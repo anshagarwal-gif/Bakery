@@ -1,19 +1,13 @@
-import { useState } from 'react';
 import {
-  LayoutGrid,
+  ChevronLeft, ChevronRight, LayoutGrid,
   CreditCard,
   Package2,
   Heart,
   BarChart2,
   Users,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink
 } from 'lucide-react';
 
-const Sidebar = ({ setCurrentPage, currentPage }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-
+const Sidebar = ({ setCurrentPage, currentPage, isExpanded, setIsExpanded }) => {
   const toggleSidebar = () => setIsExpanded(!isExpanded);
 
   const navItems = [
@@ -27,22 +21,33 @@ const Sidebar = ({ setCurrentPage, currentPage }) => {
 
   return (
     <div
-      className={`h-screen bg-white transition-all duration-300 ${
-        isExpanded ? 'w-64' : 'w-16'
-      } flex flex-col shadow-lg`}
+      className={`h-screen bg-white transition-all duration-300 ${isExpanded ? 'w-64' : 'w-16'
+        } flex flex-col shadow-lg`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <div className="flex items-center">
-          <div className="flex-shrink-0 bg-purple-400 rounded-md mr-2 w-8 h-8"></div>
+          {isExpanded ? (
+            <div className="flex-shrink-0 bg-purple-400 rounded-md mr-2 w-8 h-8"></div>
+          ) : (
+            // Button to expand the sidebar
+            <button
+              onClick={toggleSidebar}
+              className="p-1 rounded-full bg-gray-100 text-gray-500"
+            >
+              <ChevronRight size={18} />
+            </button>
+          )}
           {isExpanded && <h1 className="font-semibold text-gray-800 text-lg">Sweet POS</h1>}
         </div>
-        <button
-          onClick={toggleSidebar}
-          className="p-1 rounded-full bg-gray-100 text-gray-500"
-        >
-          {isExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-        </button>
+        {isExpanded && (
+          <button
+            onClick={toggleSidebar}
+            className="p-1 rounded-full bg-gray-100 text-gray-500"
+          >
+            <ChevronLeft size={18} />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -54,13 +59,11 @@ const Sidebar = ({ setCurrentPage, currentPage }) => {
               <li key={item.name}>
                 <button
                   onClick={() => setCurrentPage(item.name)}
-                  className={`flex items-center w-full text-left ${
-                    isExpanded ? 'px-4 py-3' : 'px-4 py-3 justify-center'
-                  } transition-all ${
-                    isActive
+                  className={`flex items-center w-full text-left ${isExpanded ? 'px-4 py-3' : 'px-4 py-3 justify-center'
+                    } transition-all ${isActive
                       ? 'bg-purple-50 border-l-4 border-purple-400 text-purple-600'
                       : 'hover:bg-purple-50 text-gray-600'
-                  }`}
+                    }`}
                 >
                   <span className={isActive ? 'text-purple-600' : 'text-gray-500'}>{item.icon}</span>
                   {isExpanded && <span className={`ml-3 ${isActive ? 'text-purple-600 font-medium' : 'text-gray-600'}`}>{item.name}</span>}
@@ -85,11 +88,6 @@ const Sidebar = ({ setCurrentPage, currentPage }) => {
               </div>
             )}
           </div>
-          {isExpanded && (
-            <button className="text-gray-400 hover:text-gray-600">
-              <ExternalLink size={18} />
-            </button>
-          )}
         </div>
       </div>
     </div>
