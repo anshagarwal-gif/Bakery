@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './App.css';
 import Sidebar from './components/Sidebar';
-import Dashboard from './components/Pages/Dashboard';
-import Inventory from './components/Pages/Inventory';
-import Billing from './components/Pages/Billing';
-import Loyalty from './components/Pages/Loyalty';
-import Sales from './components/Pages/Sales';
-import Referral from './components/Pages/Referral';
+import Dashboard from './Pages/Dashboard';
+import Inventory from './Pages/Inventory';
+import Billing from './Pages/Billing';
+import Loyalty from './Pages/Loyalty';
+import Sales from './Pages/Sales';
+import Referral from './Pages/Referral';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('Dashboard');
@@ -48,7 +48,7 @@ function App() {
       </div>
 
       {/* Main content scrolls vertically */}
-      <main className="flex-1 overflow-y-auto bg-gray-100 p-4">
+      <main className="flex-1 overflow-y-auto bg-gray-100 pl-2">
         {renderPage()}
       </main>
     </div>

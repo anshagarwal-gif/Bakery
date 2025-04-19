@@ -21,9 +21,10 @@ const Sidebar = ({ setCurrentPage, currentPage, isExpanded, setIsExpanded }) => 
 
   return (
     <div
-      className={`h-screen bg-white transition-all duration-300 ${isExpanded ? 'w-64' : 'w-16'
-        } flex flex-col shadow-lg`}
-    >
+  className={`h-screen bg-white transition-all duration-300 ${isExpanded ? 'w-64' : 'w-16'} 
+    flex flex-col shadow-xl shadow-red-200`}
+>
+
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <div className="flex items-center">

@@ -1,27 +1,17 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Search, X, Minus, Plus, ShoppingBag } from "lucide-react";
+import axios from "axios";
 
 export default function BakeryBillingSystem() {
   const [products, setProducts] = useState([
-    { id: 1, name: "Chocolate Croissant", price: 120, category: "Pastries", icon: "🥐" },
-    { id: 2, name: "Blueberry Muffin", price: 90, category: "Muffins", icon: "🧁" },
-    { id: 3, name: "Vanilla Cupcake", price: 85, category: "Cupcakes", icon: "🧁" },
-    { id: 4, name: "French Baguette", price: 150, category: "Breads", icon: "🥖" },
-    { id: 5, name: "Cinnamon Roll", price: 110, category: "Pastries", icon: "🍥" },
-    { id: 6, name: "Chocolate Chip Cookie", price: 60, category: "Cookies", icon: "🍪" },
-    { id: 7, name: "Red Velvet Cake Slice", price: 180, category: "Cakes", icon: "🍰" },
-    { id: 8, name: "Sourdough Bread", price: 200, category: "Breads", icon: "🍞" },
-    { id: 9, name: "Cheese Danish", price: 130, category: "Pastries", icon: "🥮" },
-    { id: 10, name: "Macarons (5pcs)", price: 250, category: "Pastries", icon: "🍥" },
-    { id: 11, name: "Apple Pie Slice", price: 140, category: "Pies", icon: "🥧" },
-    { id: 12, name: "Strawberry Tart", price: 160, category: "Tarts", icon: "🍓" },
+    
   ]);
 
   const [cart, setCart] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [phoneNumber, setPhoneNumber] = useState("");
-
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
   const GST_RATE = 0.18;
 
   const categories = [
@@ -38,10 +28,29 @@ export default function BakeryBillingSystem() {
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory = activeCategory === "All" || product.category === activeCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = product.productName.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+  const fetchProducts=async()=>{
+    try {
+      const res = await axios.get(`${apiBaseUrl}/api/inventory/1`)
+      const data = res.data;
 
+        const extractedProducts = data.map(item => ({
+          ...item.product,
+          stockQuantity: item.stockQuantity,
+          status: item.status,
+          lastUpdated: item.lastUpdated
+        }));
+        console.log(extractedProducts)
+        setProducts(extractedProducts);
+    } catch (error) {
+      console.log({message:error})
+    }
+  }
+  useState(()=>{
+    fetchProducts()
+  },[])
   const addToCart = (product) => {
     const existingItemIndex = cart.findIndex((item) => item.id === product.id);
     if (existingItemIndex >= 0) {
@@ -123,13 +132,13 @@ export default function BakeryBillingSystem() {
                     key={product.id}
                     className="bg-purple-50 rounded-lg p-4 flex flex-col"
                   >
-                    <div className="flex items-center justify-center mb-4">
+                    {/* <div className="flex items-center justify-center mb-4">
                       <div className="bg-gradient-to-br from-pink-200 to-purple-100 p-4 rounded-full">
                         <div className="text-4xl">{product.icon}</div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="mt-auto">
-                      <h3 className="font-medium text-gray-800">{product.name}</h3>
+                      <h3 className="font-medium text-gray-800">{product.productName}</h3>
                       <div className="flex justify-between items-center mt-2">
                         <span className="text-gray-700">₹{product.price}</span>
                         <button
