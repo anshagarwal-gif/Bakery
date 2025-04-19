@@ -59,4 +59,31 @@ public class InventoryService {
         }
     }
 
+    public List<InventoryResponse> getInventoryByBakeryId(Long bakeryId) {
+        List<Inventory> inventories = inventoryRepository.findAll();
+
+        return inventories.stream()
+                .filter(inv -> inv.getProduct() != null &&
+                        inv.getProduct().getBakery() != null &&
+                        inv.getProduct().getBakery().getBakeryId().equals(bakeryId))
+                .map(inventory -> {
+                    String status;
+                    if (inventory.getStockQuantity() == 0) {
+                        status = "Out of Stock";
+                    } else if (inventory.getStockQuantity() <= inventory.getReorderLevel()) {
+                        status = "Low Stock";
+                    } else {
+                        status = "In Stock";
+                    }
+
+                    return new InventoryResponse(
+                            inventory.getProduct(),
+                            inventory.getStockQuantity(),
+                            inventory.getReorderLevel(),
+                            inventory.getLastUpdated(),
+                            status
+                    );
+                }).collect(Collectors.toList());
+    }
+
 }

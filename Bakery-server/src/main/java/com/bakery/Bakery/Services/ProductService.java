@@ -88,4 +88,26 @@ public class ProductService {
         return product;
     }
 
+    public List<ProductResponse> getProductsByBakeryId(Long bakeryId) {
+        List<Product> products = productRepository.findByBakery_BakeryId(bakeryId);
+
+        return products.stream().map(product -> {
+            Inventory inventory = inventoryRepository.findByProductProductId(product.getProductId());
+            boolean isAvailable = inventory != null && inventory.getStockQuantity() > 0;
+
+            return new ProductResponse(
+                    product.getProductId(),
+                    product.getProductName(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getCategory(),
+                    product.getImageUrl(),
+                    product.getCreatedAt(),
+                    product.getBakery(),
+                    isAvailable
+            );
+        }).collect(Collectors.toList());
+
+    }
+
 }
