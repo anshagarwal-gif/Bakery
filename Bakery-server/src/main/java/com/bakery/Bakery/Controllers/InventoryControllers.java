@@ -3,6 +3,7 @@ package com.bakery.Bakery.Controllers;
 import com.bakery.Bakery.DTO.InventoryResponse;
 import com.bakery.Bakery.Services.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class InventoryControllers {
     public String restockProduct(@PathVariable Long productId, @RequestParam int quantity) {
         inventoryService.restockProduct(productId, quantity);
         return "Product restocked successfully.";
+    }
+
+    @GetMapping("/{bakeryId}")
+    public ResponseEntity<List<InventoryResponse>> getInventoryByBakeryId(@PathVariable Long bakeryId) {
+        List<InventoryResponse> inventoryList = inventoryService.getInventoryByBakeryId(bakeryId);
+        return ResponseEntity.ok(inventoryList);
     }
 
 }
